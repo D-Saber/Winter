@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saber.winner.dao.TagDAO">
+  <resultMap id="TagResultMap" type="com.saber.winner.model.entity.Tag">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="visible" jdbcType="BIT" property="visible" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, `name`, visible, create_time, update_time
+  </sql>
+
+  <select id="findAll" parameterType="java.lang.String" resultMap="TagResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `d_ tag`
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from `d_ tag`
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.saber.winner.model.entity.Tag" useGeneratedKeys="true">
+    insert into `d_ tag`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="visible != null">
+        visible,
+      </if>
+        create_time,
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="visible != null">
+        #{visible,jdbcType=BIT},
+      </if>
+        now(),
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="map">
+    update `d_ tag`
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.visible != null">
+        visible = #{record.visible,jdbcType=BIT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id =#{id}
+  </update>
+
+
+</mapper>
